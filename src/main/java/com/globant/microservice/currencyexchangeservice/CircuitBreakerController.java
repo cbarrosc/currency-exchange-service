@@ -1,5 +1,6 @@
 package com.globant.microservice.currencyexchangeservice;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,8 @@ public class CircuitBreakerController {
 
 
     @GetMapping("/sample-api")
-    @Retry(name="sample-api", fallbackMethod = "hardcodedResponse")
+//    @Retry(name="sample-api", fallbackMethod = "hardcodedResponse")
+    @CircuitBreaker(name="sample-api", fallbackMethod = "hardcodedResponse")
     public String sampleApi(){
         log.info("Sample Api call received");
         ResponseEntity<String> forEntity = new RestTemplate().getForEntity("http://localhost:8080-some-dummy-url", String.class);
